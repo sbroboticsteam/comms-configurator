@@ -28,8 +28,12 @@
     height: 700px;
 }
 #hostlist {
-    
+
 }
 #topiclist {
 
+}
+.host-card, .topic-card {
+    text-align: center;
+    margin-top: 5px;
 }

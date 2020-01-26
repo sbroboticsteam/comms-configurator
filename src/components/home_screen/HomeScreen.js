@@ -3,12 +3,11 @@ import { NavLink, Redirect } from 'react-router-dom';
 import Data from '../../data_classes/Data';
 import Host from '../../data_classes/Host';
 import Topic from '../../data_classes/Topic';
+import HostsList from './hosts_list/HostsList';
+import TopicsList from './topics_list/TopicsList';
 
 class HomeScreen extends Component {
-    state = {
-        json: null
-    }
-
+    
     click() {
         console.log("SDFSD")
     }
@@ -22,14 +21,14 @@ class HomeScreen extends Component {
         let reader = new FileReader();
         reader.readAsText(selected, "UTF-8");
         reader.onload = (e) => {
-            this.setState({json: e.target.result});
+            this.props.setJson(e.target.result);
         }
     }
 
     render() {
-        let data = null;
-        if (this.state.json) {
-            data = new Data(JSON.parse(this.state.json));
+        let data = {hosts: null, topics: null};
+        if (this.props.json) {
+            data = new Data(JSON.parse(this.props.json));
         }
         return (
             <div className="home-screen">
@@ -43,11 +42,13 @@ class HomeScreen extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div id="hostlist" className="col m6 list grey lighten-5">
-                        {data ? JSON.stringify(data.hosts) : null}
+                    <div id="hostlist" className="col m4 list grey lighten-5">
+                        <h5>Hosts</h5>
+                        <HostsList hosts={data.hosts} setName={this.props.setName} />
                     </div>
-                    <div id="topiclist" className="col m6 list">
-                        {data ? JSON.stringify(data.topics) : null}
+                    <div id="topiclist" className="col m8 list">
+                        <h5>Topics</h5>
+                        <TopicsList topics={data.topics} setId={this.props.setId} />
                     </div>
                 </div>
             </div>

@@ -1,7 +1,8 @@
 {
     "hosts": [
         "apple", 
-        "banana"
+        "banana",
+        "pear"
     ],
     "topics": [
         {
@@ -17,7 +18,7 @@
             "id": "pulp",
             "paradigm": "pubsub",
             "pub": "banana",
-            "sub": ["apple"],
+            "sub": ["apple", "pear"],
             "protocol": "tcp",
             "address": "127.0.0.1",
             "port": "5555"
