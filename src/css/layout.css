@@ -1,0 +1,35 @@
+.toolbar {
+    width: 100%;
+    height: 40px;
+}
+.toolbar-buttons {
+    text-align: center;
+    margin-top: 3px;
+    margin-left: 5px;
+    margin-right: 5px;
+    float: left;
+}
+.open-button {
+    text-align: center;
+    margin-top: 3px;
+    margin-right: 10px;
+    float: right;
+}
+.toolbar-file {
+    height: 100%;
+    margin-right: 10px;
+    float: right;
+}
+#fileselect {
+    margin-top: 10px;
+}
+
+.list {
+    height: 700px;
+}
+#hostlist {
+    
+}
+#topiclist {
+
+}

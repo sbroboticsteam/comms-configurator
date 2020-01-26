@@ -1,0 +1,26 @@
+{
+    "hosts": [
+        "apple", 
+        "banana"
+    ],
+    "topics": [
+        {
+            "id": "juice",
+            "paradigm": "pubsub",
+            "pub": "apple",
+            "sub": ["banana"],
+            "protocol": "tcp",
+            "address": "127.0.0.1",
+            "port": "5556"
+        },
+        {
+            "id": "pulp",
+            "paradigm": "pubsub",
+            "pub": "banana",
+            "sub": ["apple"],
+            "protocol": "tcp",
+            "address": "127.0.0.1",
+            "port": "5555"
+        }
+    ]
+}
