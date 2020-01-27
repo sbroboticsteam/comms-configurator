@@ -14,15 +14,12 @@ class HomeScreen extends Component {
         let sub = [];
         if (this.props.json) {
             let data = new Data(JSON.parse(this.props.json));
-            console.log(data.getHosts());
             let host = data.getHosts().find((h) => h.getName() === this.props.name);
-            console.log(host);
             pub = host.getPubTopics();
             sub = host.getSubTopics();
-            console.log(pub);
         }
         return (
-            <div>
+            <div className="container">
                 <h4>{this.props.name}</h4>
                 <h5>Pub topics:</h5>
                 {pub.map((id, i) => (

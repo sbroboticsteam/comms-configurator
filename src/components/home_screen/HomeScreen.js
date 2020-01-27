@@ -14,10 +14,8 @@ class HomeScreen extends Component {
 
     upload = () => {
         let selectedfiles = document.getElementById("fileselect").files;
-        console.log(selectedfiles);
         if (selectedfiles.length == 0) return;
         let selected = selectedfiles[0];
-        console.log(selected);
         let reader = new FileReader();
         reader.readAsText(selected, "UTF-8");
         reader.onload = (e) => {
