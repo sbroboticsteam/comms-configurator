@@ -6,27 +6,26 @@ class TopicCard extends React.Component {
     setId = () => this.props.setId(this.props.id);
 
     render() {
+        let hosts = this.props.topic.getHosts();
+        let pubrep = hosts.pub ? hosts.pub : hosts.rep;
+        let subreq = hosts.sub ? null : hosts.req;
+        if (subreq === null) {
+            subreq = "";
+            hosts.sub.map((topic) => {
+                subreq = subreq + topic + ", ";
+            })
+        }
         return (
-            <div className="topic-card">
-                <Link to={'/topic/' + this.props.id} key={this.props.i} onClick={this.setId}>
-                    <div className="row">
-                        <div className="col m1" />
-                        <div className="col m2">
-                            <span className="">{this.props.id}:</span>
-                        </div>
-                        <div className="col m2">
-                            <span className="">{this.props.left}</span>
-                        </div>
-                        <div className="col m2">
-                            <span className="">{this.props.paradigm}</span>
-                        </div>
-                        <div className="col m4">
-                            <span className="">{this.props.right}</span>
-                        </div>
-                        <div className="col m1" />
-                    </div>
-                </Link>
-            </div>
+            <tr>
+                <td>
+                    <Link to={"/topic/"+this.props.id} onClick={this.setId}>
+                        {this.props.id}
+                    </Link>
+                </td>
+                <td>{this.props.topic.getParadigm()}</td>
+                <td>{pubrep}</td>
+                <td>{subreq}</td>
+            </tr>
         );
     }
 }

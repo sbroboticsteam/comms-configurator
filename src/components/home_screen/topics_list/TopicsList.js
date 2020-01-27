@@ -10,17 +10,25 @@ class TopicsList extends React.Component {
     render() {
         if (this.props.topics === null) return null;
         return (
-            <div className="row">
-                {this.props.topics.map((topic, i) => (
-                    <TopicCard 
-                        id={topic.getId()} 
-                        key={i}
-                        paradigm={topic.getParadigm()}
-                        left={topic.getHosts().pub ? topic.getHosts().pub : topic.getHosts().req}
-                        right={topic.getHosts().sub ? topic.getHosts().sub : topic.getHosts().rep}
-                        setId={this.props.setId} />
-                ))}
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Paradigm</th>
+                        <th>Pub/Rep</th>
+                        <th>Sub/Req</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.props.topics.map((topic, i) => (
+                        <TopicCard 
+                            id={topic.getId()} 
+                            key={i}
+                            topic={topic}
+                            setId={this.props.setId} />
+                    ))}
+                </tbody>
+            </table>
         );
     }
 }

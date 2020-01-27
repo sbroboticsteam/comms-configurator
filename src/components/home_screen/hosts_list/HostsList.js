@@ -10,11 +10,19 @@ class HostsList extends React.Component {
     render() {
         if (this.props.hosts === null) return null;
         return (
-            <div className="row">
-                {this.props.hosts.map((host, i) => (
-                    <HostCard name={host.getName()} key={i} setName={this.props.setName} />
-                ))}
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Topics</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.props.hosts.map((host, i) => (
+                        <HostCard name={host.getName()} key={i} setName={this.props.setName} host={host} />
+                    ))}
+                </tbody>
+            </table>
         );
     }
 }
