@@ -6,6 +6,7 @@ import Topic from '../../data_classes/Topic';
 import HostsList from './hosts_list/HostsList';
 import TopicsList from './topics_list/TopicsList';
 import {default_json} from '../../App';
+import ClearConfigsModal from '../modals/ClearConfigsModal';
 
 class HomeScreen extends Component {
     
@@ -46,7 +47,7 @@ class HomeScreen extends Component {
         return (
             <div className="home-screen">
                 <div className="toolbar grey lighten-4">
-                    <a className="waves-effect waves-light btn-small toolbar-buttons" onClick={this.clear}>Clear</a>
+                    <ClearConfigsModal clear={this.clear.bind(this)} />
                     <div className="toolbar-file">
                         <input id="fileselect" type='file' accept=".json"></input>
                         <a className="waves-effect waves-light btn-small open-button" onClick={this.upload}>Upload</a>
