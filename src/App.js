@@ -6,9 +6,15 @@ import HomeScreen from './components/home_screen/HomeScreen';
 import HostScreen from './components/host_screen/HostScreen';
 import TopicScreen from './components/topic_screen/TopicScreen';
 
+const default_json = 
+'{\
+  "hosts": [],\
+  "topics": []\
+}';
+
 class App extends Component {
   state = {
-    json: null,
+    json: default_json,
     name: null,
     id: null
   }

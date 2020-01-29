@@ -23,6 +23,10 @@ class HomeScreen extends Component {
         }
     }
 
+    copy = () => {
+        console.log("Copying to clipboard");
+    }
+
     render() {
         let data = {hosts: null, topics: null};
         if (this.props.json) {
@@ -31,22 +35,27 @@ class HomeScreen extends Component {
         return (
             <div className="home-screen">
                 <div className="toolbar grey lighten-4">
-                    <a className="waves-effect waves-light btn-small toolbar-buttons modal-trigger" onClick={this.click}>New</a>
-                    <a className="waves-effect waves-light btn-small toolbar-buttons modal-trigger" onClick={this.click}>Download</a>
+                    <a className="waves-effect waves-light btn-small toolbar-buttons" onClick={this.click}>New</a>
+                    <a className="waves-effect waves-light btn-small toolbar-buttons" onClick={this.click}>Download</a>
                     <div className="toolbar-file">
                         <input id="fileselect" type='file' accept=".json"></input>
                         <a className="waves-effect waves-light btn-small open-button" onClick={this.upload}>Upload</a>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col m4 list grey lighten-5">
+                    <div className="col m3 list grey lighten-5">
                         <h5>Hosts</h5>
                         <HostsList hosts={data.hosts} setName={this.props.setName} />
                     </div>
-                    <div className="col m8 list">
+                    <div className="col m9 list">
                         <h5>Topics</h5>
                         <TopicsList topics={data.topics} setId={this.props.setId} />
                     </div>
+                </div>
+                <div id="json-display">
+                    <h5>JSON:</h5>
+                    <a className="btn-small waves-effect waves-light" onClick={this.copy}>Copy to Clipboard</a>
+                    <textarea id="json-text" readOnly value={this.props.json ? this.props.json : ""} />
                 </div>
             </div>
         );
