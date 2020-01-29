@@ -5,11 +5,12 @@ import Host from '../../data_classes/Host';
 import Topic from '../../data_classes/Topic';
 import HostsList from './hosts_list/HostsList';
 import TopicsList from './topics_list/TopicsList';
+import {default_json} from '../../App';
 
 class HomeScreen extends Component {
     
-    click() {
-        console.log("SDFSD")
+    clear = () => {
+        this.props.setJson(default_json);
     }
 
     upload = () => {
@@ -25,6 +26,9 @@ class HomeScreen extends Component {
 
     copy = () => {
         console.log("Copying to clipboard");
+        let text = document.getElementById("json-text");
+        text.select();
+        document.execCommand("copy");
     }
 
     render() {
@@ -35,8 +39,7 @@ class HomeScreen extends Component {
         return (
             <div className="home-screen">
                 <div className="toolbar grey lighten-4">
-                    <a className="waves-effect waves-light btn-small toolbar-buttons" onClick={this.click}>New</a>
-                    <a className="waves-effect waves-light btn-small toolbar-buttons" onClick={this.click}>Download</a>
+                    <a className="waves-effect waves-light btn-small toolbar-buttons" onClick={this.clear}>Clear</a>
                     <div className="toolbar-file">
                         <input id="fileselect" type='file' accept=".json"></input>
                         <a className="waves-effect waves-light btn-small open-button" onClick={this.upload}>Upload</a>
