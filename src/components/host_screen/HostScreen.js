@@ -8,31 +8,82 @@ class HomeScreen extends Component {
         let id = e.target.innerHTML;
         this.props.setId(id);
     }
+
+    deleteTopic = (e) => {
+        console.log("Deleting topic")
+    }
+
+    unlinkTopic = (e) => {
+        console.log("Unlinking topic")
+    }
+
+    addTopic = () => {
+        console.log("Adding topic")
+    }
+
+    deleteHost = () => {
+        console.log("Deleting this host")
+    }
     
     render() {
-        let pub = [];
-        let sub = [];
-        if (this.props.json) {
-            let data = new Data(JSON.parse(this.props.json));
-            let host = data.getHosts().find((h) => h.getName() === this.props.name);
-            pub = host.getPubTopics();
-            sub = host.getSubTopics();
-        }
+        if (!this.props.json) return null;
+        let data = new Data(JSON.parse(this.props.json));
+        let host = data.getHosts().find((h) => h.getName() === this.props.name);
+        let pub = host.getPubTopics();
+        let sub = host.getSubTopics();
         return (
             <div className="container">
-                <h4>{this.props.name}</h4>
-                <h5>Pub topics:</h5>
-                {pub.map((id, i) => (
-                    <Link to={'/topic/'+id} onClick={this.setId} key={i}>
-                        {id}
-                    </Link>
-                ))}
-                <h5>Sub topics:</h5>
-                {sub.map((id, i) => (
-                    <Link to={'/topic/'+id} onClick={this.setId} key={i}>
-                        {id}
-                    </Link>
-                ))}
+                <div className="hostscreen_title">
+                    <h3 className="leftfloat">{this.props.name}</h3>
+                    <a className="delete_button btn-floating waves-effect waves-light" onClick={this.deleteHost}>
+                        <i className="material-icons">delete</i>
+                    </a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Role</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {pub.map((topic, i) => (
+                            <tr key={i}>
+                                <td>
+                                <Link to={'/topic/'+topic} onClick={this.setId} key={i}>
+                                    {topic}
+                                </Link>
+                                </td>
+                                <td>publisher</td>
+                                <td>
+                                    <a id={"delete_"+topic} className="btn-floating waves-effect waves-light btn-small red" onClick={this.deleteTopic}>
+                                        <i className="material-icons">delete</i>
+                                    </a>
+                                </td>
+                            </tr>
+                        ))}
+                        {sub.map((topic, i) => (
+                            <tr key={i}>
+                                <td>
+                                <Link to={'/topic/'+topic} onClick={this.setId} key={i}>
+                                    {topic}
+                                </Link>
+                                </td>
+                                <td>subscriber</td>
+                                <td>
+                                    <a id={"unlink_"+topic} className="btn-floating waves-effect waves-light btn-small orange" onClick={this.unlinkTopic}>
+                                        <i className="material-icons">close</i>
+                                    </a>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <br />
+                <a className="btn-floating waves-effect waves-light" onClick={this.addTopic}>
+                    <i className="material-icons">add</i>
+                </a>
             </div>
         );
     }

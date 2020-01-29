@@ -37,7 +37,7 @@ export default class Topic {
     }
 
     getProtocolInfo() {
-        let info;
+        let info = {};
         info.protocol = this.protocol;
         info.address = this.address;
         if (info.protocol === "tcp") info.port = this.port;

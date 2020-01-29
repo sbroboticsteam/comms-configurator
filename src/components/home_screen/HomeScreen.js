@@ -32,19 +32,18 @@ class HomeScreen extends Component {
             <div className="home-screen">
                 <div className="toolbar grey lighten-4">
                     <a className="waves-effect waves-light btn-small toolbar-buttons modal-trigger" onClick={this.click}>New</a>
-                    <a className="waves-effect waves-light btn-small toolbar-buttons modal-trigger" onClick={this.click}>Load</a>
-                    <a className="waves-effect waves-light btn-small toolbar-buttons" onClick={this.click}>Save</a>
+                    <a className="waves-effect waves-light btn-small toolbar-buttons modal-trigger" onClick={this.click}>Download</a>
                     <div className="toolbar-file">
                         <input id="fileselect" type='file' accept=".json"></input>
                         <a className="waves-effect waves-light btn-small open-button" onClick={this.upload}>Upload</a>
                     </div>
                 </div>
                 <div className="row">
-                    <div id="hostlist" className="col m4 list grey lighten-5">
+                    <div className="col m4 list grey lighten-5">
                         <h5>Hosts</h5>
                         <HostsList hosts={data.hosts} setName={this.props.setName} />
                     </div>
-                    <div id="topiclist" className="col m8 list">
+                    <div className="col m8 list">
                         <h5>Topics</h5>
                         <TopicsList topics={data.topics} setId={this.props.setId} />
                     </div>

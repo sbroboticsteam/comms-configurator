@@ -17,11 +17,10 @@
         {
             "id": "pulp",
             "paradigm": "pubsub",
-            "pub": "banana",
-            "sub": ["apple", "pear"],
-            "protocol": "tcp",
-            "address": "127.0.0.1",
-            "port": "5555"
+            "pub": "pear",
+            "sub": ["apple", "banana"],
+            "protocol": "ipc",
+            "address": "asdf"
         }
     ]
 }

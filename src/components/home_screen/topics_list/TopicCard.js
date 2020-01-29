@@ -15,6 +15,7 @@ class TopicCard extends React.Component {
                 subreq = subreq + topic + ", ";
             })
         }
+        let {protocol, address, port} = this.props.topic.getProtocolInfo();
         return (
             <tr>
                 <td>
@@ -25,6 +26,9 @@ class TopicCard extends React.Component {
                 <td>{this.props.topic.getParadigm()}</td>
                 <td>{pubrep}</td>
                 <td>{subreq}</td>
+                <td>{protocol}</td>
+                <td>{address}</td>
+                <td>{port}</td>
             </tr>
         );
     }

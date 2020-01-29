@@ -27,13 +27,31 @@
 .list {
     height: 700px;
 }
-#hostlist {
-
-}
-#topiclist {
-
+#hostlist, #topiclist {
+    text-align: center;
 }
 .host-card, .topic-card {
     text-align: center;
     margin-top: 5px;
+}
+.hostlink {
+    
+}
+.leftfloat {
+    float: left;
+}
+.topicscreen_hosts_title {
+    height: 50px;
+}
+.topicscreen_hosts_button {
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.delete_button {
+    float: right;
+    margin-top: 30px;
+}
+.hostscreen_title, .topicscreen_title {
+    height: 90px;
 }
