@@ -1,15 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import HostCard from './HostCard';
-import { realpathSync } from 'fs';
+import NewHostModal from '../../modals/NewHostModal';
 
 class HostsList extends React.Component {
     delete = () => {
         this.props.delete(this.props.i);
-    }
-
-    addHost = () => {
-        console.log("Adding host");
     }
 
     render() {
@@ -30,9 +25,7 @@ class HostsList extends React.Component {
                     </tbody>
                 </table>
                 <br />
-                <a className="btn-floating waves-effect waves-light" onClick={this.addHost}>
-                    <i className="material-icons">add</i>
-                </a>
+                <NewHostModal addHost={this.props.addHost} />
             </div>
         );
     }
