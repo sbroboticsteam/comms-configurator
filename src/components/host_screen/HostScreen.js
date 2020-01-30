@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Data from '../../data_classes/Data';
+import DeleteHostModal from '../modals/DeleteHostModal';
 
 class HomeScreen extends Component {
 
@@ -10,12 +11,15 @@ class HomeScreen extends Component {
     }
 
     unlinkTopic = (e) => {
-        console.log("Unlinking topic");
-        let host = this.props.name;
         let str = e.target.id;
         let [role, id] = str.split("-");
-        console.log(role+" "+id);
         let dict = JSON.parse(this.props.json);
+        dict = this.unlinkTopicHelper(dict, role, id);
+        this.props.setJson(JSON.stringify(dict));
+    }
+
+    unlinkTopicHelper = (dict, role, id) => {
+        let host = this.props.name;
         let topic = dict.topics.find(t => (t.id === id));
         if (role === "publisher") {
             topic.pub = "";
@@ -26,7 +30,7 @@ class HomeScreen extends Component {
         } else if (role === "responder") {
             topic.rep = "";
         }
-        this.props.setJson(JSON.stringify(dict));
+        return dict;
     }
 
     addTopic = () => {
@@ -34,7 +38,23 @@ class HomeScreen extends Component {
     }
 
     deleteHost = () => {
-        console.log("Deleting this host")
+        let data = new Data(JSON.parse(this.props.json));
+        let host = data.getHosts().find((h) => h.getName() === this.props.name);
+        let dict = JSON.parse(this.props.json);
+        host.getPubTopics().map(topic => {
+            dict = this.unlinkTopicHelper(dict, "publisher", topic);
+        });
+        host.getSubTopics().map(topic => {
+            dict = this.unlinkTopicHelper(dict, "subscriber", topic);
+        });
+        host.getReqTopics().map(topic => {
+            dict = this.unlinkTopicHelper(dict, "requester", topic);
+        });
+        host.getRepTopics().map(topic => {
+            dict = this.unlinkTopicHelper(dict, "responder", topic);
+        });
+        dict.hosts = dict.hosts.filter(h => h !== this.props.name);
+        this.props.setJson(JSON.stringify(dict));
     }
 
     generate_entry = (topic, role, i) => {
@@ -68,9 +88,7 @@ class HomeScreen extends Component {
             <div className="container">
                 <div className="hostscreen_title">
                     <h3 className="leftfloat">{this.props.name}</h3>
-                    <a className="delete_button btn-floating waves-effect waves-light" onClick={this.deleteHost}>
-                        <i className="material-icons">delete</i>
-                    </a>
+                    <DeleteHostModal deleteHost={this.deleteHost.bind(this)} />
                 </div>
                 <table>
                     <thead>
