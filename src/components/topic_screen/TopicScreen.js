@@ -218,7 +218,7 @@ class TopicScreen extends Component {
                     <option value="tcp">tcp</option>
                     <option value="udp">udp</option>
                     <option value="ipc">ipc (not supported yet)</option>
-                    <option value="inproc">inproc (not supported yet)</option>
+                    <option value="inproc">inproc</option>
                 </select>
                 <label htmlFor="address">Address</label>
                 <input type="text" id="address" 

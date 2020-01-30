@@ -11,6 +11,11 @@ const defaultState = {
     req: ""
 };
 
+const addrPrefix = {
+    ipc: "comms",
+    inproc: "foo"
+}
+
 class NewTopicModal extends Modal {
     state = defaultState;
 
@@ -59,6 +64,41 @@ class NewTopicModal extends Modal {
         this.setState({sub: newSub});
     }
 
+    generatePort = () => {
+        let topics = this.props.topics;
+        let i = 5555;
+        for (; i<6000 ; i++) {
+            let valid = true;
+            topics.map(topic => {
+                let protinfo = topic.getProtocolInfo();
+                if (protinfo.port === i.toString()) {
+                    valid = false;
+                }
+            });
+            if (valid) break;
+        }
+        return i.toString();
+    }
+
+    generateAddr = (protocol) => {
+        let topics = this.props.topics;
+        let i=0;
+        for (i; i<100; i++) {
+            let valid = true;
+            let match = addrPrefix[protocol] + i.toString();
+            console.log(match);
+            topics.map(topic => {
+                let protinfo = topic.getProtocolInfo();
+                console.log(protinfo);
+                if (protinfo.address === match) {
+                    valid = false;
+                }
+            });
+            if (valid) break;
+        }
+        return addrPrefix[protocol]+i.toString();
+    }
+
     addTopic = () => {
         let newTopic = {};
         newTopic.id = this.state.id;
@@ -66,10 +106,10 @@ class NewTopicModal extends Modal {
         newTopic.paradigm = this.state.paradigm;
         if (newTopic.protocol === "tcp" || newTopic.protocol === "udp") {
             newTopic.address = "127.0.0.1";
-            newTopic.port = "5555"; // TODO: make unique
+            newTopic.port = this.generatePort();
         }
         else {
-            newTopic.address = "foobar"; // TODO: make unique
+            newTopic.address = this.generateAddr(newTopic.protocol);
         }
         if (newTopic.paradigm === "pubsub") {
             newTopic.pub = this.state.pub;
@@ -137,7 +177,7 @@ class NewTopicModal extends Modal {
                             <option value="tcp">tcp</option>
                             <option value="udp">udp</option>
                             <option value="ipc">ipc (no support for this yet)</option>
-                            <option value="inproc">inproc (no support for this yet)</option>
+                            <option value="inproc">inproc</option>
                         </select>
                         <br />
                     </div>

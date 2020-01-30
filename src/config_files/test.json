@@ -20,7 +20,15 @@
             "req": "pear",
             "rep": "banana",
             "protocol": "ipc",
-            "address": "asdf"
+            "address": "comms1"
+        },
+        {
+            "id": "zest",
+            "paradigm": "pubsub",
+            "pub": "pear",
+            "sub": ["banana"],
+            "protocol": "inproc",
+            "address": "foo1"
         }
     ]
 }

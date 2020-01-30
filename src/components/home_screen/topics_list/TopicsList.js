@@ -35,7 +35,7 @@ class TopicsList extends React.Component {
                     </tbody>
                 </table>
                 <br />
-                <NewTopicModal hosts={this.props.hosts} addTopic={this.props.addTopic} />
+                <NewTopicModal hosts={this.props.hosts} addTopic={this.props.addTopic} topics={this.props.topics} />
             </div>
         );
     }
