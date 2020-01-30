@@ -27,7 +27,6 @@ class App extends Component {
     topics.map(topic => {
       if ((topic.paradigm === "pubsub" && (topic.pub !== "" || topic.sub.length > 0))
           || (topic.paradigm === "reqrep" && (topic.req !== "" || topic.rep !== ""))) {
-        console.log("SDfsf");
         t.push(topic);
         }
     });

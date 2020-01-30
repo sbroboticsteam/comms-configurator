@@ -86,10 +86,8 @@ class NewTopicModal extends Modal {
         for (i; i<100; i++) {
             let valid = true;
             let match = addrPrefix[protocol] + i.toString();
-            console.log(match);
             topics.map(topic => {
                 let protinfo = topic.getProtocolInfo();
-                console.log(protinfo);
                 if (protinfo.address === match) {
                     valid = false;
                 }

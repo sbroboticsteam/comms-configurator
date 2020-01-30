@@ -56,7 +56,7 @@ class HomeScreen extends Component {
                     <ClearConfigsModal clear={this.clear.bind(this)} />
                     <div className="toolbar-file">
                         <input id="fileselect" type='file' accept=".json"></input>
-                        <a className="waves-effect waves-light btn-small open-button" onClick={this.upload}>Upload</a>
+                        <a className="waves-effect waves-light btn-small open-button" onClick={this.upload}>Load from File</a>
                     </div>
                 </div>
                 <div className="row">
