@@ -154,20 +154,96 @@ class TopicScreen extends Component {
             </div>
         );
     }
+
+    pub_section = (pub) => { return this.host_section(pub, "Publisher"); }
+    rep_section = (rep) => { return this.host_section(rep, "Responder"); }
+    req_section = (req) => { return this.host_section(req, "Requester"); }
+    host_section = (host, role) => {
+        return (
+            <React.Fragment>
+                <div className="topicscreen_hosts_title">
+                    <h5 className="leftfloat">{role+":"}</h5> 
+                    <a className="topicscreen_hosts_button btn-floating waves-effect waves-light btn-small" onClick={this.editPublisher}>
+                        <i className="material-icons">edit</i>
+                    </a>
+                </div>
+                <div className="hostlink">
+                    <Link to={'/host/'+host} onClick={this.setName}>
+                        {host}
+                    </Link>
+                </div>
+            </React.Fragment>
+        );
+    }
+
+    sub_section = (sub) => {
+        return (
+            <React.Fragment>
+                <div className="topicscreen_hosts_title">
+                    <h5 className="leftfloat">Subscribers:</h5> 
+                    <a className="topicscreen_hosts_button btn-floating waves-effect waves-light btn-small" onClick={this.editSubscribers}>
+                        <i className="material-icons">edit</i>
+                    </a>
+                </div>
+                {sub.map((host, i) => (
+                    <React.Fragment key={i}>
+                        <div className="hostlink">
+                            <Link to={'/host/'+host} onClick={this.setName} key={i}>
+                                {host}
+                            </Link>
+                        </div>
+                        <br />
+                    </React.Fragment>
+                ))}
+            </React.Fragment>
+        );
+    }
     
     render() {
-        if(this.props.json) {
-            let data = new Data(JSON.parse(this.props.json));
-            let topic = data.getTopics().find((t) => t.getId() === this.props.id);
-            if (!topic) return <Redirect to="/" />
-            if (topic.getParadigm() == "pubsub") {
-                return this.pubsub();
-            }
-            else if (topic.getParadigm() == "reqrep") {
-                return this.reqrep();
-            }
-        }
-        return null;
+        if (!this.props.json) return null;
+        let data = new Data(JSON.parse(this.props.json));
+        let topic = data.getTopics().find((t) => t.getId() === this.props.id);
+        if (!topic) return <Redirect to="/" />
+        let hosts = topic.getHosts();
+        let {pub, sub, req, rep} = hosts;
+        let protocolinfo = topic.getProtocolInfo();
+        let {protocol, address, port} = protocolinfo;
+        return (
+            <div className="container">
+                <div className="topicscreen_title">
+                    <h3 className="leftfloat">{this.props.id}</h3>
+                    <a className="delete_button btn-floating waves-effect waves-light" onClick={this.deleteTopic}>
+                        <i className="material-icons">delete</i>
+                    </a>
+                </div>
+                <span>Paradigm:  {topic.getParadigm()}</span><br/><br/>
+                
+                <label htmlFor="protocol">Protocol</label>
+                <select className="browser-default" id="protocol">
+                    <option selected={"tcp" === protocol ? "selected" : null} value="tcp">tcp</option>
+                    <option selected={"udp" === protocol ? "selected" : null} value="udp">udp</option>
+                    <option selected={"ipc" === protocol ? "selected" : null} value="ipc">ipc (not supported yet)</option>
+                    <option selected={"inproc" === protocol ? "selected" : null} value="inproc">inproc (not supported yet)</option>
+                </select>
+                <label htmlFor="address">Address</label>
+                <input type="text" id="address" 
+                    defaultValue={address} />
+                {port ? (
+                    <React.Fragment>
+                        <label htmlFor="port">Port</label>
+                        <input type="text" id="port" 
+                            defaultValue={port} />
+                    </React.Fragment>
+                ) : null}
+                {topic.getParadigm() === "pubsub" ? this.pub_section(pub) : this.rep_section(rep)}
+                {topic.getParadigm() === "pubsub" ? this.sub_section(sub) : this.req_section(req)}
+                {this.state.edited ? (
+                    <a className="btn waves-effect waves-light pink" onClick={this.save}>
+                        Save Changes
+                    </a>
+                ) : null}
+            </div>
+        );
     }
 
 }
