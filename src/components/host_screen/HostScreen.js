@@ -9,12 +9,24 @@ class HomeScreen extends Component {
         this.props.setId(id);
     }
 
-    deleteTopic = (e) => {
-        console.log("Deleting topic")
-    }
-
     unlinkTopic = (e) => {
-        console.log("Unlinking topic")
+        console.log("Unlinking topic");
+        let host = this.props.name;
+        let str = e.target.id;
+        let [role, id] = str.split("-");
+        console.log(role+" "+id);
+        let dict = JSON.parse(this.props.json);
+        let topic = dict.topics.find(t => (t.id === id));
+        if (role === "publisher") {
+            topic.pub = "";
+        } else if (role === "subscriber") {
+            topic.sub.splice(topic.sub.indexOf(host), 1);
+        } else if (role === "requester") {
+            topic.req = "";
+        } else if (role === "responder") {
+            topic.rep = "";
+        }
+        this.props.setJson(JSON.stringify(dict));
     }
 
     addTopic = () => {
@@ -35,15 +47,9 @@ class HomeScreen extends Component {
                 </td>
                 <td>{role}</td>
                 <td>
-                    {role === ("publisher" || "responder") ? (
-                        <a id={"delete_"+topic} className="btn-floating waves-effect waves-light btn-small red" onClick={this.deleteTopic}>
-                            <i className="material-icons">delete</i>
-                        </a>
-                    ) : (
-                        <a id={"unlink_"+topic} className="btn-floating waves-effect waves-light btn-small orange" onClick={this.unlinkTopic}>
-                            <i className="material-icons">close</i>
-                        </a>
-                    )}
+                    <a className="btn-floating waves-effect waves-light btn-small orange" onClick={this.unlinkTopic}>
+                        <i id={role+"-"+topic} className="material-icons">close</i>
+                    </a>
                 </td>
             </tr>
         );
