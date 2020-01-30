@@ -39,6 +39,13 @@ class HomeScreen extends Component {
         this.props.setJson(newjson);
     }
 
+    addTopic = (topic) => {
+        let newdict = JSON.parse(this.props.json);
+        newdict.topics.push(topic);
+        let newjson = JSON.stringify(newdict);
+        this.props.setJson(newjson);
+    }
+
     render() {
         let data = {hosts: null, topics: null};
         if (this.props.json) {
@@ -60,7 +67,7 @@ class HomeScreen extends Component {
                     </div>
                     <div className="col m9 list">
                         <h5>Topics</h5>
-                        <TopicsList topics={data.topics} setId={this.props.setId} />
+                        <TopicsList topics={data.topics} setId={this.props.setId} hosts={JSON.parse(this.props.json).hosts} addTopic={this.addTopic.bind(this)} />
                     </div>
                 </div>
                 <div id="json-display">

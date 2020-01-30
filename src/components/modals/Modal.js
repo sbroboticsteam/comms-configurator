@@ -10,7 +10,7 @@ class Modal extends Component {
             opacity: 0.5,
             dismissible: false,
             startingTop: "10%",
-            endingTop: "30%"
+            endingTop: "15%"
         };
         MaterializeCSS.Modal.init(this.Modal, options);
     }

@@ -1,14 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import TopicCard from './TopicCard';
+import NewTopicModal from '../../modals/NewTopicModal';
 
 class TopicsList extends React.Component {
     delete = () => {
         this.props.delete(this.props.i);
-    }
-
-    addTopic = () => {
-        console.log("Adding topic");
     }
 
     render() {
@@ -38,9 +35,7 @@ class TopicsList extends React.Component {
                     </tbody>
                 </table>
                 <br />
-                <a className="btn-floating waves-effect waves-light" onClick={this.addTopic}>
-                    <i className="material-icons">add</i>
-                </a>
+                <NewTopicModal hosts={this.props.hosts} addTopic={this.props.addTopic} />
             </div>
         );
     }
