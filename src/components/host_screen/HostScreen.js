@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Data from '../../data_classes/Data';
 import DeleteHostModal from '../modals/DeleteHostModal';
+import AddTopicModal from '../modals/AddTopicModal';
 
 class HomeScreen extends Component {
 
@@ -33,8 +34,26 @@ class HomeScreen extends Component {
         return dict;
     }
 
-    addTopic = () => {
-        console.log("Adding topic")
+    addTopic = (topic, role) => {
+        let host = this.props.name;
+        let newDict = JSON.parse(this.props.json);
+        let target = newDict.topics.find(t => t.id === topic);
+        let r = [];
+        switch(role) {
+            case "publisher":
+                r = "pub"; break;
+            case "subscriber":
+                r = "sub";
+                target[r].push(host);
+                break;
+            case "responder":
+                r = "rep"; break;
+            case "requester":
+                r = "req"; break;
+            default: break;
+        }
+        if (role !== "subscriber") target[r] = host;
+        this.props.setJson(JSON.stringify(newDict));
     }
 
     deleteHost = () => {
@@ -84,6 +103,8 @@ class HomeScreen extends Component {
         let sub = host.getSubTopics();
         let req = host.getReqTopics();
         let rep = host.getRepTopics();
+        let topics = data.getTopics().map(topic => topic.getId());
+        let topics_dict = JSON.parse(this.props.json).topics;
         return (
             <div className="container">
                 <div className="hostscreen_title">
@@ -114,9 +135,7 @@ class HomeScreen extends Component {
                     </tbody>
                 </table>
                 <br />
-                <a className="btn-floating waves-effect waves-light" onClick={this.addTopic}>
-                    <i className="material-icons">add</i>
-                </a>
+                <AddTopicModal addTopic={this.addTopic.bind(this)} topics={topics} topics_dict={topics_dict}/>
             </div>
         );
     }
