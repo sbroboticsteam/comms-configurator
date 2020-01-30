@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Data from '../../data_classes/Data';
+import DeleteTopicModal from '../modals/DeleteTopicModal';
 
 class TopicScreen extends Component {
     state = {
         edited: false,
         edit_host: null,
-        json: this.props.json
+        json: this.props.json,
+        deleted: false
     }
 
     setName = (e) => {
@@ -26,7 +28,6 @@ class TopicScreen extends Component {
                 }
                 break;
             case "edit-Subscribers":
-                console.log("DFSDF");
                 if (this.state.edit_host === "Subscribers") {
                     this.setState({edit_host: null});
                 }
@@ -55,7 +56,10 @@ class TopicScreen extends Component {
     }
 
     deleteTopic = () => {
-        console.log("deleting this topic");
+        let newDict = JSON.parse(this.props.json);
+        newDict.topics = newDict.topics.filter(topic => (topic.id !== this.props.id));
+        this.setState({deleted: true});
+        this.props.setJson(JSON.stringify(newDict));
     }
 
     save = () => {
@@ -73,7 +77,6 @@ class TopicScreen extends Component {
         let newDict = JSON.parse(this.state.json);
         let topic = newDict.topics.find((t) => t.id === this.props.id);
         topic.protocol = value;
-        console.log(newDict);
         this.setState({json: JSON.stringify(newDict)});
         this.setEdited();
     }
@@ -194,6 +197,7 @@ class TopicScreen extends Component {
     
     render() {
         if (!this.state.json) return null;
+        if(this.state.deleted) return <Redirect to="/"/>
         let data = new Data(JSON.parse(this.state.json));
         let topic = data.getTopics().find((t) => t.getId() === this.props.id);
         if (!topic) return <Redirect to="/" />
@@ -205,9 +209,7 @@ class TopicScreen extends Component {
             <div className="container">
                 <div className="topicscreen_title">
                     <h3 className="leftfloat">{this.props.id}</h3>
-                    <a className="delete_button btn-floating waves-effect waves-light" onClick={this.deleteTopic}>
-                        <i className="material-icons">delete</i>
-                    </a>
+                    <DeleteTopicModal deleteTopic={this.deleteTopic.bind(this)}/>
                 </div>
                 <span>Paradigm:  {topic.getParadigm()}</span><br/><br/>
                 
