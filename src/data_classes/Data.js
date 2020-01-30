@@ -28,7 +28,7 @@ export default class Data {
                 let pub = this.hosts.find(host => 
                     host.getName() === topic.pub
                 );
-                pub.addPubTopic(topic.id);
+                if (pub) pub.addPubTopic(topic.id);
                 topic.sub.forEach(sub => {
                     let s = this.hosts.find(host => 
                         host.getName() === sub
@@ -40,11 +40,11 @@ export default class Data {
                 let req = this.hosts.find(host =>
                     host.getName() === topic.req
                 );
-                req.addReqTopic(topic.id);
+                if (req) req.addReqTopic(topic.id);
                 let rep = this.hosts.find(host =>
                     host.getName() === topic.rep
                 );
-                rep.addRepTopic(topic.id);
+                if (rep) rep.addRepTopic(topic.id);
             }
         });
     }

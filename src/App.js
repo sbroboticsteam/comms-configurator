@@ -5,6 +5,7 @@ import { BrowserRouter, Switch, Link, Route } from 'react-router-dom';
 import HomeScreen from './components/home_screen/HomeScreen';
 import HostScreen from './components/host_screen/HostScreen';
 import TopicScreen from './components/topic_screen/TopicScreen';
+import Data from './data_classes/Data';
 
 export const default_json = 
 '{\
@@ -19,8 +20,19 @@ class App extends Component {
     id: null
   }
 
-  setJson = (value) => {
-    this.setState({json: value});
+  setJson = (json) => {
+    let dict = JSON.parse(json);
+    let topics = dict.topics;
+    let t = [];
+    topics.map(topic => {
+      if ((topic.paradigm === "pubsub" && (topic.pub !== "" || topic.sub.length > 0))
+          || (topic.paradigm === "reqrep" && (topic.req !== "" || topic.rep !== ""))) {
+        console.log("SDfsf");
+        t.push(topic);
+        }
+    });
+    dict.topics = t;
+    this.setState({json: JSON.stringify(dict)});
   }
 
   setName = (name) => {

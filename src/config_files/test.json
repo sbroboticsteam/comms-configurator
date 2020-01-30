@@ -18,7 +18,7 @@
             "id": "pulp",
             "paradigm": "reqrep",
             "req": "pear",
-            "rep": "apple",
+            "rep": "banana",
             "protocol": "ipc",
             "address": "asdf"
         }

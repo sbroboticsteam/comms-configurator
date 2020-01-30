@@ -4,7 +4,11 @@ import Modal from './Modal';
 const defaultState = {
     id: "",
     paradigm: "pubsub",
-    protocol: "tcp"
+    protocol: "tcp",
+    pub: "",
+    sub: [],
+    rep: "",
+    req: ""
 };
 
 class NewTopicModal extends Modal {
@@ -17,6 +21,12 @@ class NewTopicModal extends Modal {
 
     handleParadigmSelect = (e) => {
         let newval = e.target.options[e.target.selectedIndex].value;
+        if (newval === "pubsub") {
+            this.setState({rep: "", req: ""});
+        }
+        else {
+            this.setState({pub: "", sub: []});
+        }
         this.setState({paradigm: newval});
     }
 
@@ -25,8 +35,35 @@ class NewTopicModal extends Modal {
         this.setState({protocol: newval});
     }
 
+    handleHostSelect = (e) => {
+        let value = e.target.options[e.target.selectedIndex].value;
+        if (e.target.id === "input-host-1") {
+            if (this.state.paradigm === "pubsub") {
+                this.setState({pub: value});
+            }
+            else {
+                this.setState({rep: value});
+            }
+        }
+        else {
+            this.setState({req: value});
+        }
+        
+    }
+
+    handleSubSelect = (e) => {
+        let newSub = [];
+        for(let i=0; i<e.target.selectedOptions.length; i++) {
+            newSub.push(e.target.selectedOptions[i].value);
+        }
+        this.setState({sub: newSub});
+    }
+
     addTopic = () => {
-        let newTopic = JSON.parse(JSON.stringify(this.state));
+        let newTopic = {};
+        newTopic.id = this.state.id;
+        newTopic.protocol = this.state.protocol;
+        newTopic.paradigm = this.state.paradigm;
         if (newTopic.protocol === "tcp" || newTopic.protocol === "udp") {
             newTopic.address = "127.0.0.1";
             newTopic.port = "5555"; // TODO: make unique
@@ -34,20 +71,13 @@ class NewTopicModal extends Modal {
         else {
             newTopic.address = "foobar"; // TODO: make unique
         }
-        let hostselect1 = document.getElementById("input-host-1");
-        let hostselect2 = document.getElementById("input-host-2");
         if (newTopic.paradigm === "pubsub") {
-            newTopic.pub = hostselect1.options[hostselect1.selectedIndex].value;
-            newTopic.sub = [];
-            for(let i=0; i<hostselect2.options.length; i++) {
-                if(hostselect2.options[i].selected) {
-                    newTopic.sub.push(hostselect2.options[i].value);
-                }
-            }
+            newTopic.pub = this.state.pub;
+            newTopic.sub = this.state.sub;
         }
         else {
-            newTopic.rep = hostselect1.options[hostselect1.selectedIndex].value;
-            newTopic.req = hostselect2.options[hostselect2.selectedIndex].value;
+            newTopic.rep = this.state.rep;
+            newTopic.req = this.state.req;
         }
         this.props.addTopic(newTopic);
         this.clearFields();
@@ -76,7 +106,9 @@ class NewTopicModal extends Modal {
                         </select>
                         <br />
                         <label htmlFor="input-host-1">{this.state.paradigm === "pubsub" ? "Publisher" : "Responder"}</label>
-                        <select className="browser-default" id="input-host-1">
+                        <select value={this.state.paradigm === "pubsub" ? this.state.pub : this.state.rep}
+                            className="browser-default" id="input-host-1" onChange={this.handleHostSelect}>
+                            <option value="" disabled hidden>Select...</option>
                             {hosts.map((host, i) => (
                                 <option value={host} key={i}>{host}</option>
                             ))}
@@ -84,13 +116,16 @@ class NewTopicModal extends Modal {
                         <br />
                         <label htmlFor="input-host-2">{this.state.paradigm === "pubsub" ? "Subscribers" : "Requester"}</label>
                         {this.state.paradigm === "pubsub" ? (
-                            <select multiple className="browser-default" id="input-host-2" style={{height: "60px"}}>
+                            <select multiple className="browser-default" id="input-host-2" style={{height: "60px"}} 
+                            onChange={this.handleSubSelect}>
                                 {hosts.map((host, i) => (
                                     <option value={host} key={i}>{host}</option>
                                 ))}
                             </select>
                         ) : (
-                            <select className="browser-default" id="input-host-2">
+                            <select value={this.state.req} className="browser-default" 
+                                id="input-host-2" onChange={this.handleHostSelect}>
+                                <option value="" disabled hidden>Select...</option>
                                 {hosts.map((host, i) => (
                                     <option value={host} key={i}>{host}</option>
                                 ))}
@@ -98,7 +133,7 @@ class NewTopicModal extends Modal {
                         )}
                         <br />
                         <label htmlFor="input-protocol">Protocol</label>
-                        <select className="browser-default" id="input-protocol" onChange={this.handleProtocolSelect}>
+                        <select value={this.state.protocol} className="browser-default" id="input-protocol" onChange={this.handleProtocolSelect}>
                             <option value="tcp">tcp</option>
                             <option value="udp">udp</option>
                             <option value="ipc">ipc (no support for this yet)</option>
