@@ -26,7 +26,7 @@ export default class Topic {
         }
         this.protocol = conf.protocol;
         this.address = conf.address;
-        if (this.protocol === ("tcp" || "udp")) this.port = conf.port;
+        if (this.protocol === "tcp" || this.protocol === "udp") this.port = conf.port;
     }
 
     getId() { return this.id; }
@@ -47,7 +47,7 @@ export default class Topic {
         let info = {};
         info.protocol = this.protocol;
         info.address = this.address;
-        if (info.protocol === "tcp") info.port = this.port;
+        if (info.protocol === "tcp" || info.protocol === "udp") info.port = this.port;
         return info;
     }
 

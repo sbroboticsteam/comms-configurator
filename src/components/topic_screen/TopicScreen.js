@@ -4,7 +4,9 @@ import Data from '../../data_classes/Data';
 
 class TopicScreen extends Component {
     state = {
-        edited: false
+        edited: false,
+        edit_host: null,
+        json: this.props.json
     }
 
     setName = (e) => {
@@ -12,12 +14,44 @@ class TopicScreen extends Component {
         this.props.setName(name);
     }
 
-    editPublisher = () => {
-        console.log("Editing publisher");
-    }
-
-    editSubscribers = () => {
-        console.log("Editing subscribers");
+    editHost = (e) => {
+        let id = e.target.id;
+        switch(id) {
+            case "edit-Publisher":
+                if (this.state.edit_host === "Publisher") {
+                    this.setState({edit_host: null});
+                }
+                else {
+                    this.setState({edit_host: "Publisher"});
+                }
+                break;
+            case "edit-Subscribers":
+                console.log("DFSDF");
+                if (this.state.edit_host === "Subscribers") {
+                    this.setState({edit_host: null});
+                }
+                else {
+                    this.setState({edit_host: "Subscribers"});
+                }
+                break;
+            case "edit-Responder":
+                if (this.state.edit_host === "Responder") {
+                    this.setState({edit_host: null});
+                }
+                else {
+                    this.setState({edit_host: "Responder"});
+                }
+                break;
+            case "edit-Requester":
+                if (this.state.edit_host === "Requester") {
+                    this.setState({edit_host: null});
+                }
+                else {
+                    this.setState({edit_host: "Requester"});
+                }
+                break;
+            default: break;
+        }
     }
 
     deleteTopic = () => {
@@ -25,183 +59,142 @@ class TopicScreen extends Component {
     }
 
     save = () => {
-        console.log("Saving changes")
+        this.setState({edited: false});
+        this.setState({edit_host: null});
+        this.props.setJson(this.state.json);
     }
 
-    pubsub() {
-        let data = new Data(JSON.parse(this.props.json));
-        let topic = data.getTopics().find((t) => t.getId() === this.props.id);
-        let hosts = topic.getHosts();
-        let pub = hosts.pub;
-        let sub = hosts.sub;
-        let protocolinfo = topic.getProtocolInfo();
-        let {protocol, address, port} = protocolinfo;
-        return (
-            <div className="container">
-                <div className="topicscreen_title">
-                    <h3 className="leftfloat">{this.props.id}</h3>
-                    <a className="delete_button btn-floating waves-effect waves-light" onClick={this.deleteTopic}>
-                        <i className="material-icons">delete</i>
-                    </a>
-                </div>
-                <span>Paradigm:  {topic.getParadigm()}</span><br/><br/>
-                <label htmlFor="protocol">Protocol</label>
-                <input type="text" id="protocol" 
-                    defaultValue={protocol} />
-                <label htmlFor="address">Address</label>
-                <input type="text" id="address" 
-                    defaultValue={address} />
-                {port ? (
-                    <React.Fragment>
-                        <label htmlFor="port">Port</label>
-                        <input type="text" id="port" 
-                            defaultValue={port} />
-                    </React.Fragment>
-                ) : null}
-                <div className="topicscreen_hosts_title">
-                    <h5 className="leftfloat">Publisher:</h5> 
-                    <a className="topicscreen_hosts_button btn-floating waves-effect waves-light btn-small" onClick={this.editPublisher}>
-                        <i className="material-icons">edit</i>
-                    </a>
-                </div>
-                <div className="hostlink">
-                    <Link to={'/host/'+pub} onClick={this.setName}>
-                        {pub}
-                    </Link>
-                </div>
-                <div className="topicscreen_hosts_title">
-                    <h5 className="leftfloat">Subscribers:</h5> 
-                    <a className="topicscreen_hosts_button btn-floating waves-effect waves-light btn-small" onClick={this.editSubscribers}>
-                        <i className="material-icons">edit</i>
-                    </a>
-                </div>
-                {sub.map((host, i) => (
-                    <React.Fragment key={i}>
-                        <div className="hostlink">
-                            <Link to={'/host/'+host} onClick={this.setName} key={i}>
-                                {host}
-                            </Link>
-                        </div>
-                        <br />
-                    </React.Fragment>
-                ))}
-                {this.state.edited ? (
-                    <a className="btn waves-effect waves-light pink" onClick={this.save}>
-                        Save Changes
-                    </a>
-                ) : null}
-            </div>
-        );
+    setEdited = () => {
+        this.setState({edited: true});
     }
 
-    reqrep() {
-        let data = new Data(JSON.parse(this.props.json));
-        let topic = data.getTopics().find((t) => t.getId() === this.props.id);
-        let hosts = topic.getHosts();
-        let rep = hosts.rep;
-        let req = hosts.req;
-        let protocolinfo = topic.getProtocolInfo();
-        let {protocol, address, port} = protocolinfo;
-        return (
-            <div className="container">
-                <div className="topicscreen_title">
-                    <h3 className="leftfloat">{this.props.id}</h3>
-                    <a className="delete_button btn-floating waves-effect waves-light" onClick={this.deleteTopic}>
-                        <i className="material-icons">delete</i>
-                    </a>
-                </div>
-                <span>Paradigm:  {topic.getParadigm()}</span><br/><br/>
-                <label htmlFor="protocol">Protocol</label>
-                <input type="text" id="protocol" 
-                    defaultValue={protocol} />
-                <label htmlFor="address">Address</label>
-                <input type="text" id="address" 
-                    defaultValue={address} />
-                {port ? (
-                    <React.Fragment>
-                        <label htmlFor="port">Port</label>
-                        <input type="text" id="port" 
-                            defaultValue={port} />
-                    </React.Fragment>
-                ) : null}
-                <div className="topicscreen_hosts_title">
-                    <h5 className="leftfloat">Responder:</h5> 
-                    <a className="topicscreen_hosts_button btn-floating waves-effect waves-light btn-small" onClick={this.editPublisher}>
-                        <i className="material-icons">edit</i>
-                    </a>
-                </div>
-                <div className="hostlink">
-                    <Link to={'/host/'+rep} onClick={this.setName}>
-                        {rep}
-                    </Link>
-                </div>
-                <div className="topicscreen_hosts_title">
-                    <h5 className="leftfloat">Requester:</h5> 
-                    <a className="topicscreen_hosts_button btn-floating waves-effect waves-light btn-small" onClick={this.editSubscribers}>
-                        <i className="material-icons">edit</i>
-                    </a>
-                </div>
-                <div className="hostlink">
-                    <Link to={'/host/'+req} onClick={this.setName}>
-                        {req}
-                    </Link>
-                </div>
-                {this.state.edited ? (
-                    <a className="btn waves-effect waves-light pink" onClick={this.save}>
-                        Save Changes
-                    </a>
-                ) : null}
-            </div>
-        );
+    handleChangeProtocol = (e) => {
+        let value = e.target.options[e.target.selectedIndex].value;
+        let newDict = JSON.parse(this.state.json);
+        let topic = newDict.topics.find((t) => t.id === this.props.id);
+        topic.protocol = value;
+        console.log(newDict);
+        this.setState({json: JSON.stringify(newDict)});
+        this.setEdited();
+    }
+
+    handleChangeAddrPort = (e) => {
+        let id = e.target.id;
+        let value = e.target.value;
+        let newDict = JSON.parse(this.state.json);
+        let topic = newDict.topics.find((t) => t.id === this.props.id);
+        if (id === "address") {
+            topic.address = value;
+        }
+        else {
+            topic.port = value;
+        }
+        this.setState({json: JSON.stringify(newDict)});
+        this.setEdited();
+    }
+
+    handleChangeHost = (e) => {
+        let id = e.target.id;
+        let value = e.target.options[e.target.selectedIndex].value;
+        let newDict = JSON.parse(this.state.json);
+        let topic = newDict.topics.find((t) => t.id === this.props.id);
+        switch(id) {
+            case "select-Publisher":
+                topic.pub = value;
+                break;
+            case "select-Requester":
+                topic.req = value;
+                break;
+            case "select-Responder":
+                topic.rep = value;
+                break;
+            default: break;
+        }
+        this.setState({json: JSON.stringify(newDict)});
+        this.setEdited();
+    }
+    handleChangeSub = (e) => {
+        let id = e.target.id;
+        let newDict = JSON.parse(this.state.json);
+        let topic = newDict.topics.find((t) => t.id === this.props.id);
+        topic.sub = [];
+        for(let i=0; i<e.target.options.length; i++) {
+            if(e.target.options[i].selected) {
+                topic.sub.push(e.target.options[i].value);
+            }
+        }
+        this.setState({json: JSON.stringify(newDict)});
+        this.setEdited();
     }
 
     pub_section = (pub) => { return this.host_section(pub, "Publisher"); }
     rep_section = (rep) => { return this.host_section(rep, "Responder"); }
     req_section = (req) => { return this.host_section(req, "Requester"); }
     host_section = (host, role) => {
+        let hosts = JSON.parse(this.state.json).hosts;
         return (
             <React.Fragment>
                 <div className="topicscreen_hosts_title">
                     <h5 className="leftfloat">{role+":"}</h5> 
-                    <a className="topicscreen_hosts_button btn-floating waves-effect waves-light btn-small" onClick={this.editPublisher}>
-                        <i className="material-icons">edit</i>
+                    <a className="topicscreen_hosts_button btn-floating waves-effect waves-light btn-small" onClick={this.editHost}>
+                        <i id={"edit-"+role} className="material-icons">edit</i>
                     </a>
                 </div>
-                <div className="hostlink">
-                    <Link to={'/host/'+host} onClick={this.setName}>
-                        {host}
-                    </Link>
-                </div>
+                {this.state.edit_host === role ? (
+                    <div>
+                        <select defaultValue={host} id={"select-"+role} className="browser-default" onChange={this.handleChangeHost}>
+                            {hosts.map((host, i) => (
+                                <option value={host} key={i}>{host}</option>
+                            ))}
+                        </select>
+                    </div>
+                ) : (
+                    <div className="hostlink">
+                        <Link to={'/host/'+host} onClick={this.setName}>
+                            {host}
+                        </Link>
+                    </div>
+                )}
             </React.Fragment>
         );
     }
-
     sub_section = (sub) => {
+        let hosts = JSON.parse(this.state.json).hosts;
         return (
             <React.Fragment>
                 <div className="topicscreen_hosts_title">
                     <h5 className="leftfloat">Subscribers:</h5> 
-                    <a className="topicscreen_hosts_button btn-floating waves-effect waves-light btn-small" onClick={this.editSubscribers}>
-                        <i className="material-icons">edit</i>
+                    <a className="topicscreen_hosts_button btn-floating waves-effect waves-light btn-small" onClick={this.editHost}>
+                        <i id="edit-Subscribers" className="material-icons">edit</i>
                     </a>
                 </div>
-                {sub.map((host, i) => (
-                    <React.Fragment key={i}>
-                        <div className="hostlink">
-                            <Link to={'/host/'+host} onClick={this.setName} key={i}>
-                                {host}
-                            </Link>
-                        </div>
-                        <br />
-                    </React.Fragment>
-                ))}
+                {this.state.edit_host === "Subscribers" ? (
+                    <div>
+                        <select multiple className="browser-default" style={{height: "150px", fontSize: "16px"}} onChange={this.handleChangeSub}>
+                            {hosts.map((host, i) => (
+                                <option value={host} key={i}>{host}</option>
+                            ))}
+                        </select>
+                    </div>
+                ) : (
+                    sub.map((host, i) => (
+                        <React.Fragment key={i}>
+                            <div className="hostlink">
+                                <Link to={'/host/'+host} onClick={this.setName} key={i}>
+                                    {host}
+                                </Link>
+                            </div>
+                            <br />
+                        </React.Fragment>
+                    ))
+                )}
             </React.Fragment>
         );
     }
     
     render() {
-        if (!this.props.json) return null;
-        let data = new Data(JSON.parse(this.props.json));
+        if (!this.state.json) return null;
+        let data = new Data(JSON.parse(this.state.json));
         let topic = data.getTopics().find((t) => t.getId() === this.props.id);
         if (!topic) return <Redirect to="/" />
         let hosts = topic.getHosts();
@@ -219,24 +212,25 @@ class TopicScreen extends Component {
                 <span>Paradigm:  {topic.getParadigm()}</span><br/><br/>
                 
                 <label htmlFor="protocol">Protocol</label>
-                <select className="browser-default" id="protocol">
-                    <option selected={"tcp" === protocol ? "selected" : null} value="tcp">tcp</option>
-                    <option selected={"udp" === protocol ? "selected" : null} value="udp">udp</option>
-                    <option selected={"ipc" === protocol ? "selected" : null} value="ipc">ipc (not supported yet)</option>
-                    <option selected={"inproc" === protocol ? "selected" : null} value="inproc">inproc (not supported yet)</option>
+                <select value={protocol} className="browser-default" id="protocol" onChange={this.handleChangeProtocol}>
+                    <option value="tcp">tcp</option>
+                    <option value="udp">udp</option>
+                    <option value="ipc">ipc (not supported yet)</option>
+                    <option value="inproc">inproc (not supported yet)</option>
                 </select>
                 <label htmlFor="address">Address</label>
                 <input type="text" id="address" 
-                    defaultValue={address} />
-                {port ? (
+                    value={address} onChange={this.handleChangeAddrPort} />
+                {protocol === "tcp" || protocol === "udp" ? (
                     <React.Fragment>
                         <label htmlFor="port">Port</label>
                         <input type="text" id="port" 
-                            defaultValue={port} />
+                            value={port} onChange={this.handleChangeAddrPort} />
                     </React.Fragment>
                 ) : null}
                 {topic.getParadigm() === "pubsub" ? this.pub_section(pub) : this.rep_section(rep)}
                 {topic.getParadigm() === "pubsub" ? this.sub_section(sub) : this.req_section(req)}
+                <br />
                 {this.state.edited ? (
                     <a className="btn waves-effect waves-light pink" onClick={this.save}>
                         Save Changes
