@@ -13,6 +13,12 @@ class HostCard extends React.Component {
         this.props.host.getSubTopics().map((topic) => (
             topics = topics + topic + ", "
         ))
+        this.props.host.getReqTopics().map((topic) => (
+            topics = topics + topic + ", "
+        ))
+        this.props.host.getRepTopics().map((topic) => (
+            topics = topics + topic + ", "
+        ))
         return (
             <tr>
                 <td>

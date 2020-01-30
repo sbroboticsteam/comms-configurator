@@ -26,7 +26,6 @@ class HomeScreen extends Component {
     }
 
     copy = () => {
-        console.log("Copying to clipboard");
         let text = document.getElementById("json-text");
         text.select();
         document.execCommand("copy");

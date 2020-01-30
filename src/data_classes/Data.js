@@ -28,15 +28,23 @@ export default class Data {
                 let pub = this.hosts.find(host => 
                     host.getName() === topic.pub
                 );
-                let pi = this.hosts.indexOf(pub);
-                this.hosts[pi].addPubTopic(topic.id);
+                pub.addPubTopic(topic.id);
                 topic.sub.forEach(sub => {
                     let s = this.hosts.find(host => 
                         host.getName() === sub
                     );
-                    let si = this.hosts.indexOf(s);
-                    this.hosts[si].addSubTopic(topic.id);
+                    s.addSubTopic(topic.id);
                 });
+            }
+            else if (topic.paradigm === "reqrep") {
+                let req = this.hosts.find(host =>
+                    host.getName() === topic.req
+                );
+                req.addReqTopic(topic.id);
+                let rep = this.hosts.find(host =>
+                    host.getName() === topic.rep
+                );
+                rep.addRepTopic(topic.id);
             }
         });
     }

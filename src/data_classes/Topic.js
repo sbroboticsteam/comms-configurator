@@ -18,11 +18,15 @@ export default class Topic {
                 this.pub = conf.pub;
                 this.sub = conf.sub;
                 break;
+            case "reqrep":
+                this.req = conf.req;
+                this.rep = conf.rep;
+                break;
             default: console.log("ERROR: not a valid paradigm");
         }
         this.protocol = conf.protocol;
         this.address = conf.address;
-        if (this.protocol === "tcp") this.port = conf.port;
+        if (this.protocol === ("tcp" || "udp")) this.port = conf.port;
     }
 
     getId() { return this.id; }
@@ -32,6 +36,9 @@ export default class Topic {
     getHosts() {
         if (this.paradigm === "pubsub") {
             return { pub: this.pub, sub: this.sub };
+        }
+        else if (this.paradigm === "reqrep") {
+            return { req: this.req, rep: this.rep };
         }
         return null;
     }

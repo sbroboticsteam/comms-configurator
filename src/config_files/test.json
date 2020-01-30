@@ -9,16 +9,16 @@
             "id": "juice",
             "paradigm": "pubsub",
             "pub": "apple",
-            "sub": ["banana"],
+            "sub": ["banana", "pear"],
             "protocol": "tcp",
             "address": "127.0.0.1",
             "port": "5556"
         },
         {
             "id": "pulp",
-            "paradigm": "pubsub",
-            "pub": "pear",
-            "sub": ["apple", "banana"],
+            "paradigm": "reqrep",
+            "req": "pear",
+            "rep": "apple",
             "protocol": "ipc",
             "address": "asdf"
         }
