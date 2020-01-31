@@ -268,14 +268,13 @@ class TopicScreen extends Component {
                 <label htmlFor="protocol">Protocol</label>
                 <select value={protocol} className="browser-default" id="protocol" onChange={this.handleChangeProtocol}>
                     <option value="tcp">tcp</option>
-                    <option value="udp">udp</option>
                     <option value="ipc">ipc (not supported yet)</option>
                     <option value="inproc">inproc</option>
                 </select>
                 <label htmlFor="address">Address</label>
                 <input type="text" id="address" disabled={protocol === "ipc" ? "disabled" : ""}
                     value={address} onChange={this.handleChangeAddrPort} />
-                {protocol === "tcp" || protocol === "udp" ? (
+                {protocol === "tcp" ? (
                     <React.Fragment>
                         <label htmlFor="port">Port</label>
                         <input type="text" id="port" 

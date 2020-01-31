@@ -102,7 +102,7 @@ class NewTopicModal extends Modal {
         newTopic.id = this.state.id;
         newTopic.protocol = this.state.protocol;
         newTopic.paradigm = this.state.paradigm;
-        if (newTopic.protocol === "tcp" || newTopic.protocol === "udp") {
+        if (newTopic.protocol === "tcp") {
             newTopic.address = "127.0.0.1";
             newTopic.port = this.generatePort();
         }
@@ -173,7 +173,6 @@ class NewTopicModal extends Modal {
                         <label htmlFor="input-protocol">Protocol</label>
                         <select value={this.state.protocol} className="browser-default" id="input-protocol" onChange={this.handleProtocolSelect}>
                             <option value="tcp">tcp</option>
-                            <option value="udp">udp</option>
                             <option value="ipc">ipc (no support for this yet)</option>
                             <option value="inproc">inproc</option>
                         </select>
