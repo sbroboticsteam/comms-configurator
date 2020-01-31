@@ -173,8 +173,8 @@ class NewTopicModal extends Modal {
                         <label htmlFor="input-protocol">Protocol</label>
                         <select value={this.state.protocol} className="browser-default" id="input-protocol" onChange={this.handleProtocolSelect}>
                             <option value="tcp">tcp</option>
-                            <option value="ipc">ipc (no support for this yet)</option>
-                            <option value="inproc">inproc</option>
+                            <option value="ipc">ipc</option>
+                            <option value="inproc">inproc (not supported yet)</option>
                         </select>
                         <br />
                     </div>

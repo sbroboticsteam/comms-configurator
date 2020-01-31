@@ -268,8 +268,8 @@ class TopicScreen extends Component {
                 <label htmlFor="protocol">Protocol</label>
                 <select value={protocol} className="browser-default" id="protocol" onChange={this.handleChangeProtocol}>
                     <option value="tcp">tcp</option>
-                    <option value="ipc">ipc (not supported yet)</option>
-                    <option value="inproc">inproc</option>
+                    <option value="ipc">ipc</option>
+                    <option value="inproc">inproc (not supported yet)</option>
                 </select>
                 <label htmlFor="address">Address</label>
                 <input type="text" id="address" disabled={protocol === "ipc" ? "disabled" : ""}
