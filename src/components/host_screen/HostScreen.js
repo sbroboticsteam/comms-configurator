@@ -103,7 +103,7 @@ class HomeScreen extends Component {
         let sub = host.getSubTopics();
         let req = host.getReqTopics();
         let rep = host.getRepTopics();
-        let topics = data.getTopics().map(topic => topic.getId());
+        let topics = data.getTopics(); // .map(topic => topic.getId());
         let topics_dict = JSON.parse(this.props.json).topics;
         return (
             <div className="container">
@@ -135,7 +135,7 @@ class HomeScreen extends Component {
                     </tbody>
                 </table>
                 <br />
-                <AddTopicModal addTopic={this.addTopic.bind(this)} topics={topics} topics_dict={topics_dict}/>
+                <AddTopicModal addTopic={this.addTopic.bind(this)} topics={topics} topics_dict={topics_dict} name={this.props.name}/>
             </div>
         );
     }

@@ -57,7 +57,9 @@ class AddTopicModal extends Modal {
                         onChange={this.handleTopicSelect} id="input-topic">
                         <option value="" disabled hidden>Select...</option>
                         {topics.map((topic, i) => (
-                            <option value={topic} key={i}>{topic}</option>
+                            !topic.hasHost(this.props.name) ? (
+                                <option value={topic.getId()} key={i}>{topic.getId()}</option>
+                            ) : null
                         ))}
                     </select>
                     {this.state.topic !== "" ? (

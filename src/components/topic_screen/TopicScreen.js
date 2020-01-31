@@ -130,11 +130,16 @@ class TopicScreen extends Component {
         this.setEdited();
     }
 
-    pub_section = (pub) => { return this.host_section(pub, "Publisher"); }
-    rep_section = (rep) => { return this.host_section(rep, "Responder"); }
-    req_section = (req) => { return this.host_section(req, "Requester"); }
-    host_section = (host, role) => {
+    pub_section = (pub, topic) => { return this.host_section(pub, "Publisher", topic); }
+    rep_section = (rep, topic) => { return this.host_section(rep, "Responder", topic); }
+    req_section = (req, topic) => { return this.host_section(req, "Requester", topic); }
+    host_section = (host, role, topic) => {
         let hosts = JSON.parse(this.state.json).hosts;
+        let topic_hosts = topic.getHosts();
+        let hostsToOmit = [];
+        if (role === "Publisher") hostsToOmit = topic_hosts.sub;
+        else if (role === "Responder") hostsToOmit.push(topic_hosts.req);
+        else if (role === "Requester") hostsToOmit.push(topic_hosts.rep);
         return (
             <React.Fragment>
                 <div className="topicscreen_hosts_title">
@@ -147,7 +152,7 @@ class TopicScreen extends Component {
                     <div>
                         <select defaultValue={host} id={"select-"+role} className="browser-default" onChange={this.handleChangeHost}>
                             {hosts.map((host, i) => (
-                                <option value={host} key={i}>{host}</option>
+                                !hostsToOmit.includes(host) ? <option value={host} key={i}>{host}</option> : null
                             ))}
                         </select>
                     </div>
@@ -161,8 +166,9 @@ class TopicScreen extends Component {
             </React.Fragment>
         );
     }
-    sub_section = (sub) => {
+    sub_section = (sub, topic) => {
         let hosts = JSON.parse(this.state.json).hosts;
+        let hostToOmit = topic.getHosts().pub;
         return (
             <React.Fragment>
                 <div className="topicscreen_hosts_title">
@@ -175,7 +181,7 @@ class TopicScreen extends Component {
                     <div>
                         <select multiple className="browser-default" style={{height: "150px", fontSize: "16px"}} onChange={this.handleChangeSub}>
                             {hosts.map((host, i) => (
-                                <option value={host} key={i}>{host}</option>
+                                hostToOmit !== host ? <option value={host} key={i}>{host}</option> : null
                             ))}
                         </select>
                     </div>
@@ -221,7 +227,7 @@ class TopicScreen extends Component {
                     <option value="inproc">inproc</option>
                 </select>
                 <label htmlFor="address">Address</label>
-                <input type="text" id="address" 
+                <input type="text" id="address"
                     value={address} onChange={this.handleChangeAddrPort} />
                 {protocol === "tcp" || protocol === "udp" ? (
                     <React.Fragment>
@@ -230,8 +236,8 @@ class TopicScreen extends Component {
                             value={port} onChange={this.handleChangeAddrPort} />
                     </React.Fragment>
                 ) : null}
-                {topic.getParadigm() === "pubsub" ? this.pub_section(pub) : this.rep_section(rep)}
-                {topic.getParadigm() === "pubsub" ? this.sub_section(sub) : this.req_section(req)}
+                {topic.getParadigm() === "pubsub" ? this.pub_section(pub, topic) : this.rep_section(rep, topic)}
+                {topic.getParadigm() === "pubsub" ? this.sub_section(sub, topic) : this.req_section(req, topic)}
                 <br />
                 {this.state.edited ? (
                     <a className="btn waves-effect waves-light pink" onClick={this.save}>

@@ -43,6 +43,17 @@ export default class Topic {
         return null;
     }
 
+    hasHost(host) {
+        if (this.paradigm === "pubsub") {
+            if (this.pub === host || this.sub.includes(host)) return true;
+            else return false;
+        }
+        else {
+            if (this.rep === host || this.req === host) return true;
+            else return false;
+        }
+    }
+
     getProtocolInfo() {
         let info = {};
         info.protocol = this.protocol;
