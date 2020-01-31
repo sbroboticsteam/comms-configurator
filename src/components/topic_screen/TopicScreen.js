@@ -3,6 +3,11 @@ import { Link, Redirect } from 'react-router-dom';
 import Data from '../../data_classes/Data';
 import DeleteTopicModal from '../modals/DeleteTopicModal';
 
+const addrPrefix = {
+    ipc: "comms",
+    inproc: "foo"
+}
+
 class TopicScreen extends Component {
     state = {
         edited: false,
@@ -72,11 +77,52 @@ class TopicScreen extends Component {
         this.setState({edited: true});
     }
 
+    generateAddr = (protocol) => {
+        let data = new Data(JSON.parse(this.state.json));
+        let topics = data.getTopics();
+        let i=0;
+        for (i; i<100; i++) {
+            let valid = true;
+            let match = addrPrefix[protocol] + i.toString();
+            topics.map(topic => {
+                let protinfo = topic.getProtocolInfo();
+                if (protinfo.address === match) {
+                    valid = false;
+                }
+            });
+            if (valid) break;
+        }
+        return addrPrefix[protocol]+i.toString();
+    }
+
+    generatePort = () => {
+        let data = new Data(JSON.parse(this.state.json));
+        let topics = data.getTopics();
+        let i = 5555;
+        for (; i<6000 ; i++) {
+            let valid = true;
+            topics.map(topic => {
+                let protinfo = topic.getProtocolInfo();
+                if (protinfo.port === i.toString()) {
+                    valid = false;
+                }
+            });
+            if (valid) break;
+        }
+        return i.toString();
+    }
+
     handleChangeProtocol = (e) => {
         let value = e.target.options[e.target.selectedIndex].value;
         let newDict = JSON.parse(this.state.json);
         let topic = newDict.topics.find((t) => t.id === this.props.id);
         topic.protocol = value;
+        if (value === "ipc" || value === "inproc") {
+            topic.address = this.generateAddr(value);
+        } else {
+            topic.address = "127.0.0.1";
+            topic.port = this.generatePort();
+        }
         this.setState({json: JSON.stringify(newDict)});
         this.setEdited();
     }
