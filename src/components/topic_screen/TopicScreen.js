@@ -227,7 +227,7 @@ class TopicScreen extends Component {
                     <option value="inproc">inproc</option>
                 </select>
                 <label htmlFor="address">Address</label>
-                <input type="text" id="address"
+                <input type="text" id="address" disabled={protocol === "ipc" ? "disabled" : ""}
                     value={address} onChange={this.handleChangeAddrPort} />
                 {protocol === "tcp" || protocol === "udp" ? (
                     <React.Fragment>
